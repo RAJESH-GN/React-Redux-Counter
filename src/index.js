@@ -1,17 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk";
+
 import registerServiceWorker from "./registerServiceWorker";
-import App from "./App";
 import results from "./store/reducers/results";
 import counter from "./store/reducers/counter";
+import App from "./App";
 import "./index.css";
 const reducers = combineReducers({
   ctr: counter,
   res: results,
 });
-
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const logger = (store) => {
   return (next) => {
     return (action) => {
@@ -22,7 +24,11 @@ const logger = (store) => {
     };
   };
 };
-const store = createStore(reducers, applyMiddleware(logger));
+
+const store = createStore(
+  reducers,
+  composeEnhancers(applyMiddleware(logger, thunk))
+);
 ReactDOM.render(
   <Provider store={store}>
     <App />

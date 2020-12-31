@@ -9,7 +9,10 @@ const reduce = (state = initialState, action) => {
     case actionType.STORE_RESULT:
       return {
         ...state,
-        results: state.results.concat({ id: new Date(), value: state.counter }),
+        results: state.results.concat({
+          id: new Date(),
+          value: action.counter,
+        }),
       };
     case actionType.DELETE_ITEM:
       return {
